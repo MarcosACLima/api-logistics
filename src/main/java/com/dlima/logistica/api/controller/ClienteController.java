@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dlima.logistica.domain.model.Cliente;
 import com.dlima.logistica.domain.repository.ClienteRepository;
+import com.dlima.logistica.domain.service.CatalogoClienteService;
 
 import lombok.AllArgsConstructor;
 
@@ -27,6 +28,7 @@ import lombok.AllArgsConstructor;
 public class ClienteController {
 
 	private ClienteRepository clienteRepository;
+	private CatalogoClienteService catalogoClienteService;
 
 	@GetMapping
 	public List<Cliente> lista() {
@@ -52,7 +54,8 @@ public class ClienteController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Cliente adicionar(@Valid @RequestBody Cliente cliente) { //transformar objeto JSON em objeto Java
-		return clienteRepository.save(cliente);
+//		return clienteRepository.save(cliente);
+		return catalogoClienteService.salvar(cliente);
 	}
 	
 	@PutMapping("/{clienteId}")
@@ -62,7 +65,8 @@ public class ClienteController {
 		}
 		
 		cliente.setId(clienteId); // setar o Id para não criar um novo cliente
-		cliente = clienteRepository.save(cliente);
+//		cliente = clienteRepository.save(cliente);
+		cliente = catalogoClienteService.salvar(cliente);
 		
 		return ResponseEntity.ok(cliente);
 	}
@@ -73,7 +77,8 @@ public class ClienteController {
 			return ResponseEntity.notFound().build(); // nao existe 404
 		}
 		
-		clienteRepository.deleteById(clienteId);
+//		clienteRepository.deleteById(clienteId);
+		catalogoClienteService.excluir(clienteId);
 		
 		return ResponseEntity.noContent().build(); // não contem corpo na resposta 204
 	}
